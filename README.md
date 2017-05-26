@@ -3,8 +3,8 @@ Simple web application which handles appointments
 
 REQUIRED TECHNOLOGIES : 
 
-PERL
-JSON
-SQL (can be any type of SQL)
-JQUERY
-HTML
+PERL<br/>
+JSON<br/>
+SQL (can be any type of SQL)<br/>
+JQUERY<br/>
+HTML<br/>
