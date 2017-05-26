@@ -38,7 +38,7 @@
             <div class="col-sm-12">
 
                 <div id="formNew">
-                    <form action="appointment.cgi" method="POST">
+                    <form action="addAppointment.pl" method="POST">
                         <input type="submit" class="btn btn-primary" value="Add">
                         <button type="button" class="btn btn-danger" id="btnCancel">Cancel</button>
                         <br/>
@@ -48,7 +48,7 @@
                                 <label>Date</label>
                             </div>
                             <div class="col-sm-6">
-                                <input type="text" id="datepicker" name="txtDate" class="form-control">
+                                <input type="text" placeholder="May 2" name="date" id="date" class="form-control">
                             </div>
                         </div>
                         <br/>
@@ -58,7 +58,7 @@
                                 <label>Time</label>
                             </div>
                             <div class="col-sm-6">
-                                <input type="text" id="timepicker" name="txtTime" class="form-control">
+                                <input type="text" placeholder="11:00am" name="time" id="time" class="form-control">
                             </div>
                         </div>
                         <br/>
@@ -68,7 +68,7 @@
                                 <label>Desc</label>
                             </div>
                             <div class="col-sm-6">
-                                <input type="text" name="description" id="txtDesc" class="form-control">
+                                <input type="text" placeholder="Something" name="description" id="description" class="form-control">
                             </div>
                         </div>
                     </form>
@@ -82,7 +82,7 @@
 
         <div class="row">
             <div class="col-sm-6">
-                <input type="text" id="txtSearch" class="form-control">
+                <input type="text" id="txtSearch" placeholder="Search here" class="form-control">
             </div>
             <div class="col-sm-4">
                 <button type="button" class="btn btn-success" id="btnSearch">Search</button>
@@ -118,12 +118,13 @@
     <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function getAppointments() {
             var json;
             $.ajax({
                 'type': 'GET',
-                'url': 'appointment.cgi',
+                'url': 'getAppointment.pl',
                 'async': true,
                 'success': function (data) {
                     var json = JSON.parse(data);
@@ -145,10 +146,7 @@
                 $("#formNew").hide();
                 $("#btnNew").show();
             });
-            $(function () {
-                $("#datepicker").datepicker();
-                $("#timepicker").timepicker({});
-            });
+
             $("#btnSearch").click(function () {
                 var value = $("txtSearch").val();
                 var targetTable = document.getElementById("table");
@@ -168,6 +166,19 @@
                     } else {
                         targetTable.rows.item(i).style.display = 'table-row';
                     }
+                }
+            });
+
+            $("form[name='formNew']").validate({
+                rules: {
+                    date: "required",
+                    time: "required",
+                    description: "required"
+                },
+                messages: {
+                    date: "Please enter date for appointment",
+                    time: "Please enter time for appointment",
+                    description: "Please enter description of appointment"
                 }
             });
         });
