@@ -9,4 +9,5 @@ JQUERY<br/>
 HTML<br/>
 
 # SCREENSHOTS
-
+<img src="https://github.com/sovicheacheth/AppointmentProject/blob/master/Screenshot1.jpg" width="250"/>
+<img src="https://github.com/sovicheacheth/AppointmentProject/blob/master/Screenshot2.jpg" width="250"/>
