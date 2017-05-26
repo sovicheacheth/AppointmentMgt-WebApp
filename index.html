@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta author="Sovichea Cheth">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <title>Appointment Project</title>
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">
+                    Appointment Management
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+
+            <div class="col-sm-12">
+                <div id="errorMessage"></div>
+                <br/>
+            </div>
+
+            <div class="col-sm-12">
+                <button type="button" class="btn btn-primary" id="btnNew">New</button>
+            </div>
+
+            <div class="col-sm-12">
+
+                <div id="formNew">
+                    <form action="appointment.cgi" method="POST">
+                        <input type="submit" class="btn btn-primary" value="Add">
+                        <button type="button" class="btn btn-danger" id="btnCancel">Cancel</button>
+                        <br/>
+                        <br/>
+                        <div class="col-sm-12">
+                            <div class="col-sm-2">
+                                <label>Date</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="text" id="datepicker" name="txtDate" class="form-control">
+                            </div>
+                        </div>
+                        <br/>
+                        <br/>
+                        <div class="col-sm-12">
+                            <div class="col-sm-2">
+                                <label>Time</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="text" id="timepicker" name="txtTime" class="form-control">
+                            </div>
+                        </div>
+                        <br/>
+                        <br/>
+                        <div class="col-sm-12">
+                            <div class="col-sm-2">
+                                <label>Desc</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="text" name="description" id="txtDesc" class="form-control">
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+
+        <br/>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <input type="text" id="txtSearch" class="form-control">
+            </div>
+            <div class="col-sm-4">
+                <button type="button" class="btn btn-success" id="btnSearch">Search</button>
+
+            </div>
+
+        </div>
+
+        <br/>
+
+        <!--Display the appointments-->
+        <div class="row">
+            <div class="col-sm-12">
+                <table id="table" class="table" cellspacing="10">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tr class="no-data">
+                        <td colspan="4">No data</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!--Using JS and AJAX here-->
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function getAppointments() {
+            var json;
+            $.ajax({
+                'type': 'GET',
+                'url': 'appointment.cgi',
+                'async': true,
+                'success': function (data) {
+                    var json = JSON.parse(data);
+                    for (var i = 0; i < json.data.length; i++) {
+                        tr = $('<tr/>');
+                        tr.append("<td>" + json.data[i].date + "</td>");
+                        tr.append("<td>" + json.data[i].time + "</td>");
+                        tr.append("<td>" + json.data[i].desc + "</td>");
+                        $('table').append(tr);
+                    }
+                }
+            });
+            $("#formNew").hide();
+            $("#btnNew").click(function () {
+                $("#formNew").show();
+                $("#btnNew").hide();
+            });
+            $("#btnCancel").click(function () {
+                $("#formNew").hide();
+                $("#btnNew").show();
+            });
+            $(function () {
+                $("#datepicker").datepicker();
+                $("#timepicker").timepicker({});
+            });
+            $("#btnSearch").click(function () {
+                var value = $("txtSearch").val();
+                var targetTable = document.getElementById("table");
+                var colcount;
+                for (var i = 0; i < targetTable.rows.length; i++) {
+                    var rowz = '';
+                    if (i == 0) {
+                        colcount = targetTable.rows.item(i).cells.length;
+                        continue;
+                    }
+
+                    for (var colj = 0; colj < colcount; colj++) {
+                        rowz += targetTable.rows.item(i).cells.item(colj).innerText;
+                    }
+                    if (rowz.indexOf(value) == -1) {
+                        targetTable.rows.item(i).style.display = 'none';
+                    } else {
+                        targetTable.rows.item(i).style.display = 'table-row';
+                    }
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>
