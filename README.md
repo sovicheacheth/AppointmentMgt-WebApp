@@ -1,5 +1,5 @@
-# APPOINTMENT PROJECT
-Simple web application which handles appointments
+
+Simple web application
 
 # REQUIRED TECHNOLOGIES : 
 PERL<br/>
